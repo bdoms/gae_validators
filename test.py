@@ -1,6 +1,6 @@
 import unittest
 
-from __init__ import validateString, validateRequiredString, validateText, validateEmail
+from __init__ import validateString, validateRequiredString, validateText, validateEmail, validateUrl
 from __init__ import validateBool, validateInt, validateDate
 
 
@@ -76,6 +76,32 @@ class TestValidators(unittest.TestCase):
         self.assertTrue(valid)
         # confirm it hasn't been modified
         self.assertEqual(value, 'test@example.com')
+
+    def testValidateUrl(self):
+        # empty string should pass
+        valid, value = validateUrl('')
+        self.assertTrue(valid)
+
+        # no host should fail
+        valid, value = validateUrl('http://')
+        self.assertFalse(valid)
+
+        # scheme and host should pass
+        valid, value = validateUrl('http://example.com')
+        self.assertTrue(valid)
+
+        # scheme should be added if not present
+        valid, value = validateUrl('example.com')
+        self.assertTrue(valid)
+        self.assertEqual(value, 'http://example.com')
+
+        # adding a path should pass
+        valid, value = validateUrl('http://example.com/path')
+        self.assertTrue(valid)
+
+        # adding a query string should pass
+        valid, value = validateUrl('http://example.com/path?key=value')
+        self.assertTrue(valid)
 
     def testValidateBool(self):
 

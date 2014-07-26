@@ -1,5 +1,6 @@
 
 from datetime import datetime
+from urlparse import urlparse, urljoin
 import re
 
 ONE_MB = 2**20
@@ -59,6 +60,24 @@ def validateEmail(source):
 
             if not EMAIL_USER.search(username) or not EMAIL_DOMAIN.search(domain):
                 valid = False
+
+    return valid, value
+
+
+def validateUrl(source):
+
+    valid, value = validateString(source)
+
+    if valid and value:
+        if '//' not in value:
+            value = '//' + value
+        parsed = urlparse(value)
+        if not parsed.scheme:
+            parsed = urlparse(urljoin('http:', parsed.geturl()))
+        if not parsed.hostname:
+            valid = False
+        else:
+            value = parsed.geturl()
 
     return valid, value
 
