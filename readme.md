@@ -55,7 +55,15 @@ validateRequiredString(source, max_length=500, newlines=False)
 validateText(source, max_length=ONE_MB, newlines=True)
 # ONE_MB is defined as 2 ** 20
 
+validateRequiredText(source, max_length=ONE_MB, newlines=True)
+
 validateEmail(source)
+
+validateRequiredEmail(source)
+
+validateUrl(source)
+
+validateRequiredUrl(source)
 
 validateBool(source)
 
