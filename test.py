@@ -1,7 +1,8 @@
 import unittest
 
-from __init__ import validateString, validateRequiredString, validateText, validateEmail, validateUrl
-from __init__ import validateBool, validateInt, validateDate
+from __init__ import (validateString, validateRequiredString, validateText, validateRequiredText,
+    validateEmail, validateRequiredEmail, validateUrl, validateRequiredUrl,
+    validateBool, validateInt, validateDate)
 
 
 class TestValidators(unittest.TestCase):
@@ -51,14 +52,31 @@ class TestValidators(unittest.TestCase):
 
     def testValidateText(self):
         # newlines should be allowed
-        valid, value = validateText('\r\n')
+        valid, value = validateText('foo\r\nbar')
         self.assertTrue(valid)
 
         # larger than normal string length should be allowed
         valid, value = validateText('a' * 501)
         self.assertTrue(valid)
 
+    def testValidateRequiredText(self):
+        # empty string should fail
+        valid, value = validateRequiredText('')
+        self.assertFalse(valid)
+
+        # that includes spaces because they'll be stripped
+        valid, value = validateRequiredText('    ')
+        self.assertFalse(valid)
+
+        # string with something should pass
+        valid, value = validateRequiredText('test')
+        self.assertTrue(valid)
+
     def testValidateEmail(self):
+        # empty string should pass
+        valid, value = validateUrl('')
+        self.assertTrue(valid)
+
         # no at sign should fail
         valid, value = validateEmail('example.com')
         self.assertFalse(valid)
@@ -76,6 +94,15 @@ class TestValidators(unittest.TestCase):
         self.assertTrue(valid)
         # confirm it hasn't been modified
         self.assertEqual(value, 'test@example.com')
+
+    def testValidateRequiredEmail(self):
+        # empty string should fail
+        valid, value = validateRequiredEmail('')
+        self.assertFalse(valid)
+
+        # string with something should pass
+        valid, value = validateRequiredEmail('test@example.com')
+        self.assertTrue(valid)
 
     def testValidateUrl(self):
         # empty string should pass
@@ -101,6 +128,15 @@ class TestValidators(unittest.TestCase):
 
         # adding a query string should pass
         valid, value = validateUrl('http://example.com/path?key=value')
+        self.assertTrue(valid)
+
+    def testValidateRequiredEmail(self):
+        # empty string should fail
+        valid, value = validateRequiredUrl('')
+        self.assertFalse(valid)
+
+        # string with something should pass
+        valid, value = validateRequiredUrl('http://example.com')
         self.assertTrue(valid)
 
     def testValidateBool(self):

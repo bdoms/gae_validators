@@ -47,11 +47,16 @@ def validateText(source, max_length=ONE_MB, newlines=True):
     return validateString(source, max_length=max_length, newlines=newlines)
 
 
+def validateRequiredText(source, max_length=ONE_MB, newlines=True):
+
+    return validateRequiredString(source, max_length=max_length, newlines=newlines)
+
+
 def validateEmail(source):
 
-    valid, value = validateRequiredString(source)
+    valid, value = validateString(source)
 
-    if valid:
+    if valid and value:
         parts = value.split('@')
         if len(parts) != 2:
             valid = False
@@ -60,6 +65,16 @@ def validateEmail(source):
 
             if not EMAIL_USER.search(username) or not EMAIL_DOMAIN.search(domain):
                 valid = False
+
+    return valid, value
+
+
+def validateRequiredEmail(source):
+
+    valid, value = validateEmail(source)
+
+    if valid and not value:
+        valid = False
 
     return valid, value
 
@@ -78,6 +93,16 @@ def validateUrl(source):
             valid = False
         else:
             value = parsed.geturl()
+
+    return valid, value
+
+
+def validateRequiredUrl(source):
+
+    valid, value = validateUrl(source)
+
+    if valid and not value:
+        valid = False
 
     return valid, value
 
