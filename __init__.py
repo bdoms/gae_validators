@@ -1,6 +1,5 @@
 
 from datetime import datetime
-from urlparse import urlparse, urljoin
 import re
 
 ONE_MB = 2**20
@@ -10,6 +9,17 @@ EMAIL_DOMAIN = re.compile(r'''
     ^(?:[a-z0-9][a-z0-9\-]{0,62}\.)+ # subdomain
     [a-z]{2,}$                       # TLD
 ''', re.I | re.VERBOSE)
+
+# based on Django's but with limited schemes: https://github.com/django/django/blob/master/django/core/validators.py
+URL = re.compile(
+    r'^(?:http|https)://' # scheme
+    r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}(?<!-)\.?)|' # domain
+    r'localhost|' # localhost...
+    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|' # ...or ipv4
+    r'\[?[A-F0-9]*:[A-F0-9:]+\]?)' # ...or ipv6
+    r'(?::\d+)?' # optional port
+    r'(?:/?|[/?]\S+)$',
+re.IGNORECASE)
 
 
 def validateString(source, max_length=500, newlines=False):
@@ -85,14 +95,10 @@ def validateUrl(source):
 
     if valid and value:
         if '//' not in value:
-            value = '//' + value
-        parsed = urlparse(value)
-        if not parsed.scheme:
-            parsed = urlparse(urljoin('http:', parsed.geturl()))
-        if not parsed.hostname:
+            value = 'http://' + value
+
+        if not URL.search(value):
             valid = False
-        else:
-            value = parsed.geturl()
 
     return valid, value
 
