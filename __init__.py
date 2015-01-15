@@ -138,7 +138,7 @@ def validateInt(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1):
     return valid, value
 
 
-def validateDateTime(source, date_format="%m/%d/%Y %I:%M %p", future_only=True):
+def validateDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=True):
     # note that this is not aware of timezones
 
     valid = True
@@ -155,7 +155,7 @@ def validateDateTime(source, date_format="%m/%d/%Y %I:%M %p", future_only=True):
     return valid, value
 
 
-def validateDate(source, date_format="%m/%d/%Y", future_only=True):
+def validateDate(source, date_format="%Y-%m-%d", future_only=True):
 
     valid, value = validateDateTime(source, date_format=date_format, future_only=future_only)
 
@@ -165,7 +165,7 @@ def validateDate(source, date_format="%m/%d/%Y", future_only=True):
     return valid, value
 
 
-def validateTime(source, time_format="%I:%M %p"):
+def validateTime(source, time_format="%H:%M"):
 
     valid, value = validateDateTime(source, date_format=time_format, future_only=False)
     

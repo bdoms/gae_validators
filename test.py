@@ -181,7 +181,7 @@ class TestValidators(unittest.TestCase):
         self.assertFalse(valid)
 
         # valid date should pass
-        valid, value = validateDateTime('01/01/3000 1:15 PM')
+        valid, value = validateDateTime('3000-01-20T13:45')
         self.assertTrue(valid)
 
         # and have the seconds be zero
@@ -189,7 +189,7 @@ class TestValidators(unittest.TestCase):
         self.assertEqual(value.microsecond, 0)
 
         # a past date should fail
-        valid, value = validateDateTime('01/01/1970 1:15 PM')
+        valid, value = validateDateTime('1970-01-20T13:45')
         self.assertFalse(valid)
 
     def testValidateDate(self):
@@ -198,11 +198,11 @@ class TestValidators(unittest.TestCase):
         self.assertFalse(valid)
 
         # valid date should pass
-        valid, value = validateDate('01/01/3000')
+        valid, value = validateDate('3000-01-20')
         self.assertTrue(valid)
 
         # a past date should fail
-        valid, value = validateDate('01/01/1970')
+        valid, value = validateDate('1970-01-20')
         self.assertFalse(valid)
 
     def testValidateTime(self):
@@ -211,7 +211,7 @@ class TestValidators(unittest.TestCase):
         self.assertFalse(valid)
 
         # valid date should pass
-        valid, value = validateTime('1:15 PM')
+        valid, value = validateTime('13:45')
         self.assertTrue(valid)
 
         # and have the seconds should be zero
