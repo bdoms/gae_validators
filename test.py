@@ -2,7 +2,7 @@ import unittest
 
 from __init__ import (validateString, validateRequiredString, validateText, validateRequiredText,
     validateEmail, validateRequiredEmail, validateUrl, validateRequiredUrl,
-    validateBool, validateInt, validateDate)
+    validateBool, validateInt, validateDateTime, validateDate, validateTime)
 
 
 class TestValidators(unittest.TestCase):
@@ -175,23 +175,48 @@ class TestValidators(unittest.TestCase):
         # confirm base 10
         self.assertEqual(value, 8)
 
+    def testValidateDateTime(self):
+        # not a date time should fail
+        valid, value = validateDateTime('None')
+        self.assertFalse(valid)
+
+        # valid date should pass
+        valid, value = validateDateTime('01/01/3000 1:15 PM')
+        self.assertTrue(valid)
+
+        # and have the seconds be zero
+        self.assertEqual(value.second, 0)
+        self.assertEqual(value.microsecond, 0)
+
+        # a past date should fail
+        valid, value = validateDateTime('01/01/1970 1:15 PM')
+        self.assertFalse(valid)
+
     def testValidateDate(self):
         # not a date should fail
         valid, value = validateDate('None')
         self.assertFalse(valid)
 
         # valid date should pass
-        valid, value = validateDate('01/01/1970')
+        valid, value = validateDate('01/01/3000')
         self.assertTrue(valid)
-        # and have the time component stripped
-        self.assertEqual(value.hour, 0)
-        self.assertEqual(value.minute, 0)
+
+        # a past date should fail
+        valid, value = validateDate('01/01/1970')
+        self.assertFalse(valid)
+
+    def testValidateTime(self):
+        # not a time should fail
+        valid, value = validateTime('None')
+        self.assertFalse(valid)
+
+        # valid date should pass
+        valid, value = validateTime('1:15 PM')
+        self.assertTrue(valid)
+
+        # and have the seconds should be zero
         self.assertEqual(value.second, 0)
         self.assertEqual(value.microsecond, 0)
-
-        # a future date should fail
-        valid, value = validateDate('01/01/3000')
-        self.assertFalse(valid)
 
 
 if __name__ == '__main__':

@@ -138,7 +138,8 @@ def validateInt(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1):
     return valid, value
 
 
-def validateDate(source, date_format="%m/%d/%Y", keep_time=False, future_only=True):
+def validateDateTime(source, date_format="%m/%d/%Y %I:%M %p", future_only=True):
+    # note that this is not aware of timezones
 
     valid = True
     try:
@@ -148,10 +149,27 @@ def validateDate(source, date_format="%m/%d/%Y", keep_time=False, future_only=Tr
         valid = False
 
     if valid:
-        if not keep_time:
-            # remove time to make this represent midnight
-            value = value.replace(hour=0, minute=0, second=0, microsecond=0)
-        if future_only and value > datetime.utcnow():
+        if future_only and value < datetime.utcnow():
             valid = False
+
+    return valid, value
+
+
+def validateDate(source, date_format="%m/%d/%Y", future_only=True):
+
+    valid, value = validateDateTime(source, date_format=date_format, future_only=future_only)
+
+    if value:
+        value = value.date()
+
+    return valid, value
+
+
+def validateTime(source, time_format="%I:%M %p"):
+
+    valid, value = validateDateTime(source, date_format=time_format, future_only=False)
+    
+    if value:
+        value = value.time()
 
     return valid, value
