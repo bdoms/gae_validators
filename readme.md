@@ -70,5 +70,9 @@ validateBool(source)
 validateInt(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1)
 # INT_SIZE is defined as a 64 bit signed integer, which means 2 ** 63
 
-validateDate(source, date_format="%m/%d/%Y", keep_time=False, future_only=True)
+validateDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=True)
+
+validateDate(source, date_format="%Y-%m-%d", future_only=True)
+
+validateTime(source, time_format="%H:%M")
 ```
