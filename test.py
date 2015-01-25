@@ -1,8 +1,8 @@
 import unittest
 
 from __init__ import (validateString, validateRequiredString, validateText, validateRequiredText,
-    validateEmail, validateRequiredEmail, validateUrl, validateRequiredUrl,
-    validateBool, validateInt, validateDateTime, validateDate, validateTime)
+    validateEmail, validateRequiredEmail, validateUrl, validateRequiredUrl, validateBool,
+    validateInt, validateFloat, validateDateTime, validateDate, validateTime)
 
 
 class TestValidators(unittest.TestCase):
@@ -174,6 +174,30 @@ class TestValidators(unittest.TestCase):
         self.assertTrue(valid)
         # confirm base 10
         self.assertEqual(value, 8)
+
+    def testValidateFloat(self):
+        # not a number should fail
+        valid, value = validateFloat('None')
+        self.assertFalse(valid)
+
+        # below the minimum should fail
+        valid, value = validateFloat(str(-2**64))
+        self.assertFalse(valid)
+
+        # above the maximum should fail
+        valid, value = validateFloat(str(2**64))
+        self.assertFalse(valid)
+
+        # valid integer should pass (implied float)
+        valid, value = validateFloat('08')
+        self.assertTrue(valid)
+        # confirm base 10
+        self.assertEqual(value, 8.0)
+
+        # actual float with decimals should pass
+        valid, value = validateFloat('3.14159')
+        self.assertTrue(valid)
+        self.assertEqual(value, 3.14159)
 
     def testValidateDateTime(self):
         # not a date time should fail

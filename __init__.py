@@ -138,6 +138,21 @@ def validateInt(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1):
     return valid, value
 
 
+def validateFloat(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1):
+
+    valid = True
+    try:
+        value = float(source)
+    except:
+        value = 0.0
+        valid = False
+
+    if valid and (min_amount > value or max_amount < value):
+        valid = False
+
+    return valid, value
+
+
 def validateDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=True):
     # note that this is not aware of timezones
 
