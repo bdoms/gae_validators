@@ -1,8 +1,8 @@
 import unittest
 
 from __init__ import (validateString, validateRequiredString, validateText, validateRequiredText,
-    validateEmail, validateRequiredEmail, validateUrl, validateRequiredUrl, validateBool,
-    validateInt, validateFloat, validateDateTime, validateDate, validateTime)
+    validateEmail, validateRequiredEmail, validateUrl, validateRequiredUrl, validateChoices,
+    validateBool, validateInt, validateFloat, validateDateTime, validateDate, validateTime)
 
 
 class TestValidators(unittest.TestCase):
@@ -130,13 +130,22 @@ class TestValidators(unittest.TestCase):
         valid, value = validateUrl('http://example.com/path?key=value')
         self.assertTrue(valid)
 
-    def testValidateRequiredEmail(self):
+    def testValidateRequiredUrl(self):
         # empty string should fail
         valid, value = validateRequiredUrl('')
         self.assertFalse(valid)
 
         # string with something should pass
         valid, value = validateRequiredUrl('http://example.com')
+        self.assertTrue(valid)
+
+    def testValidateChoices(self):
+        # should fail if it's not in list
+        valid, value = validateChoices('test', [])
+        self.assertFalse(valid)
+
+        # should pass if it is
+        valid, value = validateChoices('test', ['test'])
         self.assertTrue(valid)
 
     def testValidateBool(self):

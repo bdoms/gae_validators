@@ -113,6 +113,16 @@ def validateRequiredUrl(source):
     return valid, value
 
 
+def validateChoices(source, choices):
+
+    valid, value = validateString(source)
+
+    if valid:
+        valid = value in choices
+
+    return valid, value
+
+
 def validateBool(source):
 
     valid = True

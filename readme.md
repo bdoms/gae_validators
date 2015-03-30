@@ -65,6 +65,9 @@ validateUrl(source)
 
 validateRequiredUrl(source)
 
+validateChoices(source, choices)
+# choices should be an iterable
+
 validateBool(source)
 
 validateInt(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1)
