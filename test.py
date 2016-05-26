@@ -221,8 +221,20 @@ class TestValidators(unittest.TestCase):
         self.assertEqual(value.second, 0)
         self.assertEqual(value.microsecond, 0)
 
-        # a past date should fail
-        valid, value = validateDateTime('1970-01-20T13:45')
+        # a future date should pass if it has to be in the future
+        valid, value = validateDateTime('3000-01-20T13:45', future_only=True)
+        self.assertTrue(valid)
+
+        # but fail if it has to be in the past
+        valid, value = validateDateTime('3000-01-20T13:45', past_only=True)
+        self.assertFalse(valid)
+
+        # a past date should pass if it has to be in the past
+        valid, value = validateDateTime('1970-01-20T13:45', past_only=True)
+        self.assertTrue(valid)
+
+        # but fail if it has to be in the future
+        valid, value = validateDateTime('1970-01-20T13:45', future_only=True)
         self.assertFalse(valid)
 
     def testValidateDate(self):
@@ -234,8 +246,20 @@ class TestValidators(unittest.TestCase):
         valid, value = validateDate('3000-01-20')
         self.assertTrue(valid)
 
-        # a past date should fail
-        valid, value = validateDate('1970-01-20')
+        # a future date should pass if it has to be in the future
+        valid, value = validateDateTime('3000-01-20T13:45', future_only=True)
+        self.assertTrue(valid)
+
+        # but fail if it has to be in the past
+        valid, value = validateDateTime('3000-01-20T13:45', past_only=True)
+        self.assertFalse(valid)
+
+        # a past date should pass if it has to be in the past
+        valid, value = validateDate('1970-01-20', past_only=True)
+        self.assertTrue(valid)
+
+        # but fail if it has to be in the future
+        valid, value = validateDate('1970-01-20', future_only=True)
         self.assertFalse(valid)
 
     def testValidateTime(self):

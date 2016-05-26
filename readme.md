@@ -1,4 +1,4 @@
-Copyright &copy; 2014, [Brendan Doms](http://www.bdoms.com/)  
+Copyright &copy; 2014-2016, [Brendan Doms](http://www.bdoms.com/)  
 Licensed under the [MIT license](http://www.opensource.org/licenses/MIT)
 
 # GAE Validators
@@ -7,14 +7,14 @@ GAE Validators provides user input validation methods for the Google App Engine 
 
 ## How It Works
 
-Each validator is simply a method that receives input and returns a tuple of `(valid, value)` back.
+Each validator is simply a method that receives string input and returns a tuple of `(valid, value)` back.
 `valid` is simply a boolean of whether the input passed validation or not.
 `value` is a coerced, potentially optimized version of the input.
 For example, strings have outer whitespace stripped, while integers, booleans, and dates are all returned as their respective type.
 
 Some validators have additional parameters to help configure how validation should be done.
 By default, these are all defined to match the restrictions of the
-[GAE properties](https://developers.google.com/appengine/docs/python/datastore/typesandpropertyclasses).
+[GAE properties](https://cloud.google.com/appengine/docs/python/datastore/typesandpropertyclasses).
 In theory you could support any datastore backend simply by changing the configuration parameters.
 
 ## Example Use
@@ -75,9 +75,9 @@ validateInt(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1)
 
 validateFloat(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1)
 
-validateDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=True)
+validateDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=False, past_only=False)
 
-validateDate(source, date_format="%Y-%m-%d", future_only=True)
+validateDate(source, date_format="%Y-%m-%d", future_only=False, past_only=False)
 
 validateTime(source, time_format="%H:%M")
 ```

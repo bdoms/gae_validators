@@ -163,8 +163,10 @@ def validateFloat(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1):
     return valid, value
 
 
-def validateDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=True):
+def validateDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=False, past_only=False):
     # note that this is not aware of timezones
+    # recommend ISO format for sending from JS or other non-user sources: "%Y-%m-%dT%H:%M:%S.%fZ"
+    assert not future_only or not past_only, "There are no dates in both the future and the past."
 
     valid = True
     try:
@@ -176,13 +178,15 @@ def validateDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=True):
     if valid:
         if future_only and value < datetime.utcnow():
             valid = False
+        elif past_only and value > datetime.utcnow():
+            valid = False
 
     return valid, value
 
 
-def validateDate(source, date_format="%Y-%m-%d", future_only=True):
+def validateDate(source, date_format="%Y-%m-%d", future_only=False, past_only=False):
 
-    valid, value = validateDateTime(source, date_format=date_format, future_only=future_only)
+    valid, value = validateDateTime(source, date_format=date_format, future_only=future_only, past_only=past_only)
 
     if value:
         value = value.date()
@@ -192,7 +196,7 @@ def validateDate(source, date_format="%Y-%m-%d", future_only=True):
 
 def validateTime(source, time_format="%H:%M"):
 
-    valid, value = validateDateTime(source, date_format=time_format, future_only=False)
+    valid, value = validateDateTime(source, date_format=time_format)
     
     if value:
         value = value.time()
