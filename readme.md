@@ -1,4 +1,4 @@
-Copyright &copy; 2014-2016, [Brendan Doms](http://www.bdoms.com/)  
+Copyright &copy; 2014-2017, [Brendan Doms](http://www.bdoms.com/)  
 Licensed under the [MIT license](http://www.opensource.org/licenses/MIT)
 
 # GAE Validators
@@ -60,6 +60,14 @@ validateRequiredText(source, max_length=ONE_MB, newlines=True)
 validateEmail(source)
 
 validateRequiredEmail(source)
+
+validatePhone(source)
+# returns the number in a good approximation of E.164 format
+# this should work exactly for numbers with country code 1 (US and Canada)
+# however it will not be correct in all cases for all countries
+# you'll need a different solution if you want full international support
+
+validateRequiredPhone(source)
 
 validateUrl(source)
 

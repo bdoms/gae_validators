@@ -1,4 +1,3 @@
-
 from datetime import datetime
 import re
 
@@ -82,6 +81,34 @@ def validateEmail(source):
 def validateRequiredEmail(source):
 
     valid, value = validateEmail(source)
+
+    if valid and not value:
+        valid = False
+
+    return valid, value
+
+
+def validatePhone(source):
+
+    valid, value = validateString(source)
+
+    if valid and value:
+        digits = [char for char in value if char.isdigit()]
+        length = len(digits)
+        if length < 10 or length > 15:
+            valid = False
+        else:
+            if length == 10:
+                # assume US/Canada with the country code missing
+                digits = ['1'] + digits
+            value = '+' + ''.join(digits)
+
+    return valid, value
+
+
+def validateRequiredPhone(source):
+
+    valid, value = validatePhone(source)
 
     if valid and not value:
         valid = False

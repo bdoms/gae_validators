@@ -1,8 +1,9 @@
 import unittest
 
 from __init__ import (validateString, validateRequiredString, validateText, validateRequiredText,
-    validateEmail, validateRequiredEmail, validateUrl, validateRequiredUrl, validateChoices,
-    validateBool, validateInt, validateFloat, validateDateTime, validateDate, validateTime)
+    validateEmail, validateRequiredEmail, validatePhone, validateRequiredPhone,
+    validateUrl, validateRequiredUrl, validateChoices, validateBool, validateInt, validateFloat,
+    validateDateTime, validateDate, validateTime)
 
 
 class TestValidators(unittest.TestCase):
@@ -74,7 +75,7 @@ class TestValidators(unittest.TestCase):
 
     def testValidateEmail(self):
         # empty string should pass
-        valid, value = validateUrl('')
+        valid, value = validateEmail('')
         self.assertTrue(valid)
 
         # no at sign should fail
@@ -102,6 +103,38 @@ class TestValidators(unittest.TestCase):
 
         # string with something should pass
         valid, value = validateRequiredEmail('test@example.com')
+        self.assertTrue(valid)
+
+    def testValidatePhone(self):
+        # empty string should pass
+        valid, value = validatePhone('')
+        self.assertTrue(valid)
+
+        # not enough digits should fail
+        valid, value = validatePhone('this is not a phone number')
+        self.assertFalse(valid)
+
+        # too many digits should fail
+        valid, value = validatePhone('12345678901234567890')
+        self.assertFalse(valid)
+
+        # valid without country code should pass
+        valid, value = validatePhone('555-555-5555')
+        self.assertTrue(valid)
+        self.assertEqual(value, '+15555555555')
+
+        # valid with country code should pass
+        valid, value = validatePhone('+1 555 555 5555')
+        self.assertTrue(valid)
+        self.assertEqual(value, '+15555555555')
+
+    def testValidateRequiredPhone(self):
+        # empty string should fail
+        valid, value = validateRequiredPhone('')
+        self.assertFalse(valid)
+
+        # string with something should pass
+        valid, value = validateRequiredPhone('(555) 555-5555')
         self.assertTrue(valid)
 
     def testValidateUrl(self):
