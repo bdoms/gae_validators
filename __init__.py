@@ -24,11 +24,14 @@ re.IGNORECASE)
 def validateString(source, max_length=500, newlines=False):
 
     valid = True
-    try:
-        value = unicode(source) # defaults to utf-8 automatically
-    except:
+    if source is None:
         value = ''
-        valid = False
+    else:
+        try:
+            value = unicode(source) # defaults to utf-8 automatically
+        except:
+            value = ''
+            valid = False
 
     if valid:
         value = value.strip()

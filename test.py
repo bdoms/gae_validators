@@ -38,6 +38,11 @@ class TestValidators(unittest.TestCase):
         valid, value = validateString('')
         self.assertTrue(valid)
 
+        # none should pass as empty string
+        valid, value = validateString(None)
+        self.assertTrue(valid)
+        self.assertEqual(value, '')
+
     def testValidateRequiredString(self):
         # empty string should fail
         valid, value = validateRequiredString('')
