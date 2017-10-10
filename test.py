@@ -2,8 +2,10 @@ import unittest
 
 from __init__ import (validateString, validateRequiredString, validateText, validateRequiredText,
     validateEmail, validateRequiredEmail, validatePhone, validateRequiredPhone,
-    validateUrl, validateRequiredUrl, validateChoices, validateBool, validateInt, validateFloat,
-    validateDateTime, validateDate, validateTime)
+    validateUrl, validateRequiredUrl, validateChoices, validateRequiredChoices, validateBool,
+    validateInt, validateRequiredInt, validateFloat, validateRequiredFloat,
+    validateDateTime, validateRequiredDateTime, validateDate, validateRequiredDate,
+    validateTime, validateRequiredTime)
 
 
 class TestValidators(unittest.TestCase):
@@ -178,6 +180,10 @@ class TestValidators(unittest.TestCase):
         self.assertTrue(valid)
 
     def testValidateChoices(self):
+        # should pass if there's nothing
+        valid, value = validateChoices('', [])
+        self.assertTrue(valid)
+
         # should fail if it's not in list
         valid, value = validateChoices('test', [])
         self.assertFalse(valid)
@@ -185,6 +191,11 @@ class TestValidators(unittest.TestCase):
         # should pass if it is
         valid, value = validateChoices('test', ['test'])
         self.assertTrue(valid)
+
+    def testValidateRequiredChoices(self):
+        # should fail if there's nothing
+        valid, value = validateRequiredChoices('', [])
+        self.assertFalse(valid)
 
     def testValidateBool(self):
 
@@ -204,6 +215,10 @@ class TestValidators(unittest.TestCase):
         self.assertFalse(value)
 
     def testValidateInt(self):
+        # empty should pass
+        valid, value = validateInt('')
+        self.assertTrue(valid)
+
         # not a number should fail
         valid, value = validateInt('None')
         self.assertFalse(valid)
@@ -222,7 +237,16 @@ class TestValidators(unittest.TestCase):
         # confirm base 10
         self.assertEqual(value, 8)
 
+    def testValidateRequiredInt(self):
+        # empty should fail
+        valid, value = validateRequiredInt('')
+        self.assertFalse(valid)
+
     def testValidateFloat(self):
+        # empty should pass
+        valid, value = validateFloat('')
+        self.assertTrue(valid)
+
         # not a number should fail
         valid, value = validateFloat('None')
         self.assertFalse(valid)
@@ -246,7 +270,16 @@ class TestValidators(unittest.TestCase):
         self.assertTrue(valid)
         self.assertEqual(value, 3.14159)
 
+    def testValidateRequiredFloat(self):
+        # empty should fail
+        valid, value = validateRequiredFloat('')
+        self.assertFalse(valid)
+
     def testValidateDateTime(self):
+        # empty should pass
+        valid, value = validateDateTime('')
+        self.assertTrue(valid)
+
         # not a date time should fail
         valid, value = validateDateTime('None')
         self.assertFalse(valid)
@@ -275,7 +308,16 @@ class TestValidators(unittest.TestCase):
         valid, value = validateDateTime('1970-01-20T13:45', future_only=True)
         self.assertFalse(valid)
 
+    def testValidateRequiredDateTime(self):
+        # empty should fail
+        valid, value = validateRequiredDateTime('')
+        self.assertFalse(valid)
+
     def testValidateDate(self):
+        # empty shoulf pass
+        valid, value = validateDate('')
+        self.assertTrue(valid)
+
         # not a date should fail
         valid, value = validateDate('None')
         self.assertFalse(valid)
@@ -300,7 +342,16 @@ class TestValidators(unittest.TestCase):
         valid, value = validateDate('1970-01-20', future_only=True)
         self.assertFalse(valid)
 
+    def testValidateRequiredDate(self):
+        # empty shoulf pass
+        valid, value = validateRequiredDate('')
+        self.assertFalse(valid)
+
     def testValidateTime(self):
+        # emoty should pass
+        valid, value = validateTime('')
+        self.assertTrue(valid)
+
         # not a time should fail
         valid, value = validateTime('None')
         self.assertFalse(valid)
@@ -312,6 +363,11 @@ class TestValidators(unittest.TestCase):
         # and have the seconds should be zero
         self.assertEqual(value.second, 0)
         self.assertEqual(value.microsecond, 0)
+
+    def testValidateRequiredTime(self):
+        # emoty should fail
+        valid, value = validateRequiredTime('')
+        self.assertFalse(valid)
 
 
 if __name__ == '__main__':

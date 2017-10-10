@@ -147,8 +147,18 @@ def validateChoices(source, choices):
 
     valid, value = validateString(source)
 
-    if valid:
+    if valid and value:
         valid = value in choices
+
+    return valid, value
+
+
+def validateRequiredChoices(source, choices):
+
+    valid, value = validateChoices(source, choices)
+
+    if valid and not value:
+        valid = False
 
     return valid, value
 
@@ -166,13 +176,26 @@ def validateInt(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1):
     # one is subtracted from the max amount because 0 counts as a possible value on the positive side
 
     valid = True
-    try:
-        value = int(source)
-    except:
-        value = 0
-        valid = False
+    if source:
+        try:
+            value = int(source)
+        except:
+            value = None
+            valid = False
 
-    if valid and (min_amount > value or max_amount < value):
+        if valid and (min_amount > value or max_amount < value):
+            valid = False
+    else:
+        value = None
+
+    return valid, value
+
+
+def validateRequiredInt(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1):
+
+    valid, value = validateInt(source, min_amount=min_amount, max_amount=max_amount)
+
+    if valid and not value:
         valid = False
 
     return valid, value
@@ -181,13 +204,26 @@ def validateInt(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1):
 def validateFloat(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1):
 
     valid = True
-    try:
-        value = float(source)
-    except:
-        value = 0.0
-        valid = False
+    if source:
+        try:
+            value = float(source)
+        except:
+            value = None
+            valid = False
 
-    if valid and (min_amount > value or max_amount < value):
+        if valid and (min_amount > value or max_amount < value):
+            valid = False
+    else:
+        value = None
+
+    return valid, value
+
+
+def validateRequiredFloat(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1):
+
+    valid, value = validateFloat(source, min_amount=min_amount, max_amount=max_amount)
+
+    if valid and not value:
         valid = False
 
     return valid, value
@@ -199,17 +235,30 @@ def validateDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=False, pa
     assert not future_only or not past_only, "There are no dates in both the future and the past."
 
     valid = True
-    try:
-        value = datetime.strptime(source, date_format)
-    except:
-        value = None
-        valid = False
+    if source:
+        try:
+            value = datetime.strptime(source, date_format)
+        except:
+            value = None
+            valid = False
 
-    if valid:
-        if future_only and value < datetime.utcnow():
-            valid = False
-        elif past_only and value > datetime.utcnow():
-            valid = False
+        if valid:
+            if future_only and value < datetime.utcnow():
+                valid = False
+            elif past_only and value > datetime.utcnow():
+                valid = False
+    else:
+        value = None
+
+    return valid, value
+
+
+def validateRequiredDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=False, past_only=False):
+
+    valid, value = validateDateTime(source, date_format=date_format, future_only=future_only, past_only=past_only)
+
+    if valid and not value:
+        valid = False
 
     return valid, value
 
@@ -224,11 +273,31 @@ def validateDate(source, date_format="%Y-%m-%d", future_only=False, past_only=Fa
     return valid, value
 
 
+def validateRequiredDate(source, date_format="%Y-%m-%d", future_only=False, past_only=False):
+
+    valid, value = validateDate(source, date_format=date_format, future_only=future_only, past_only=past_only)
+
+    if valid and not value:
+        valid = False
+
+    return valid, value
+
+
 def validateTime(source, time_format="%H:%M"):
 
     valid, value = validateDateTime(source, date_format=time_format)
     
     if value:
         value = value.time()
+
+    return valid, value
+
+
+def validateRequiredTime(source, time_format="%H:%M"):
+
+    valid, value = validateTime(source, time_format=time_format)
+
+    if valid and not value:
+        valid = False
 
     return valid, value
