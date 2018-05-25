@@ -1,6 +1,14 @@
 from datetime import datetime
 import re
 
+# python 3 support
+RAW_UNICODE = False
+try:
+    unicode('')
+except NameError:
+    unicode = str
+    RAW_UNICODE = True
+
 ONE_MB = 2**20
 INT_SIZE = 2 ** 63 # 63 bits plus 1 bit for sign = 64 bit signed integer
 EMAIL_USER = re.compile(r"^[^ \t\n\r@<>()]+$", re.I)

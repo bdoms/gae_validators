@@ -1,19 +1,20 @@
 import unittest
 
-from __init__ import (validateString, validateRequiredString, validateText, validateRequiredText,
-    validateEmail, validateRequiredEmail, validatePhone, validateRequiredPhone,
-    validateUrl, validateRequiredUrl, validateChoices, validateRequiredChoices, validateBool,
-    validateInt, validateRequiredInt, validateFloat, validateRequiredFloat,
-    validateDateTime, validateRequiredDateTime, validateDate, validateRequiredDate,
-    validateTime, validateRequiredTime)
+from __init__ import (RAW_UNICODE, validateString, validateRequiredString, validateText,
+    validateRequiredText, validateEmail, validateRequiredEmail, validatePhone,
+    validateRequiredPhone, validateUrl, validateRequiredUrl, validateChoices,
+    validateRequiredChoices, validateBool, validateInt, validateRequiredInt, validateFloat,
+    validateRequiredFloat, validateDateTime, validateRequiredDateTime, validateDate,
+    validateRequiredDate, validateTime, validateRequiredTime)
 
 
 class TestValidators(unittest.TestCase):
 
     def testValidateString(self):
-        # non-unicode characters should fail
-        valid, value = validateString('\xaa')
-        self.assertFalse(valid)
+        if not RAW_UNICODE:
+            # non-ascii characters in an ascii string should fail
+            valid, value = validateString('\xaa')
+            self.assertFalse(valid)
 
         # non-ascii string should pass
         valid, value = validateString(u'\xaa')
