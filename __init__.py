@@ -2,12 +2,11 @@ from datetime import datetime
 import re
 
 # python 3 support
-RAW_UNICODE = False
+PY3 = False
 try:
     unicode('')
 except NameError:
-    unicode = str
-    RAW_UNICODE = True
+    PY3 = True
 
 ONE_MB = 2**20
 INT_SIZE = 2 ** 63 # 63 bits plus 1 bit for sign = 64 bit signed integer
@@ -29,17 +28,32 @@ URL = re.compile(
 re.IGNORECASE)
 
 
-def validateString(source, max_length=500, newlines=False):
+def validateString(source, max_length=500, newlines=False, encoding='utf-8'):
 
     valid = True
     if source is None:
         value = ''
-    else:
+    elif PY3:
+        value = str(source)
         try:
-            value = unicode(source) # defaults to utf-8 automatically
-        except:
+            value.encode(encoding)
+        except UnicodeEncodeError:
             value = ''
             valid = False
+    else:
+        if isinstance(source, unicode):
+            value = source
+            try:
+                source.encode(encoding)
+            except UnicodeEncodeError:
+                value = ''
+                valid = False
+        else:
+            try:
+                value = unicode(source, encoding)
+            except UnicodeDecodeError:
+                value = ''
+                valid = False
 
     if valid:
         value = value.strip()
@@ -52,9 +66,9 @@ def validateString(source, max_length=500, newlines=False):
     return valid, value
 
 
-def validateRequiredString(source, max_length=500, newlines=False):
+def validateRequiredString(source, max_length=500, newlines=False, encoding='utf-8'):
 
-    valid, value = validateString(source, max_length=max_length, newlines=newlines)
+    valid, value = validateString(source, max_length=max_length, newlines=newlines, encoding=encoding)
 
     if valid and not value:
         valid = False
@@ -62,14 +76,14 @@ def validateRequiredString(source, max_length=500, newlines=False):
     return valid, value
 
 
-def validateText(source, max_length=ONE_MB, newlines=True):
+def validateText(source, max_length=ONE_MB, newlines=True, encoding='utf-8'):
 
-    return validateString(source, max_length=max_length, newlines=newlines)
+    return validateString(source, max_length=max_length, newlines=newlines, encoding=encoding)
 
 
-def validateRequiredText(source, max_length=ONE_MB, newlines=True):
+def validateRequiredText(source, max_length=ONE_MB, newlines=True, encoding='utf-8'):
 
-    return validateRequiredString(source, max_length=max_length, newlines=newlines)
+    return validateRequiredString(source, max_length=max_length, newlines=newlines, encoding=encoding)
 
 
 def validateEmail(source):

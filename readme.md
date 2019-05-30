@@ -47,15 +47,15 @@ class ExampleHandler(webapp2.RequestHandler):
 Here are all the function signatures with their default configuration values:
 
 ```python
-validateString(source, max_length=500, newlines=False)
+validateString(source, max_length=500, newlines=False, encoding='utf-8')
 
-validateRequiredString(source, max_length=500, newlines=False)
+validateRequiredString(source, max_length=500, newlines=False, encoding='utf-8')
 # same as above execpt that an empty string will fail
 
-validateText(source, max_length=ONE_MB, newlines=True)
+validateText(source, max_length=ONE_MB, newlines=True, encoding='utf-8')
 # ONE_MB is defined as 2 ** 20
 
-validateRequiredText(source, max_length=ONE_MB, newlines=True)
+validateRequiredText(source, max_length=ONE_MB, newlines=True, encoding='utf-8')
 
 validateEmail(source)
 

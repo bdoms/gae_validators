@@ -1,6 +1,6 @@
 import unittest
 
-from __init__ import (RAW_UNICODE, validateString, validateRequiredString, validateText,
+from __init__ import (PY3, validateString, validateRequiredString, validateText,
     validateRequiredText, validateEmail, validateRequiredEmail, validatePhone,
     validateRequiredPhone, validateUrl, validateRequiredUrl, validateChoices,
     validateRequiredChoices, validateBool, validateInt, validateRequiredInt, validateFloat,
@@ -11,7 +11,11 @@ from __init__ import (RAW_UNICODE, validateString, validateRequiredString, valid
 class TestValidators(unittest.TestCase):
 
     def testValidateString(self):
-        if not RAW_UNICODE:
+        if PY3:
+            # check for invalid unicode string
+            valid, value = validateString('\udcc3')
+            self.assertFalse(valid)
+        else:
             # non-ascii characters in an ascii string should fail
             valid, value = validateString('\xaa')
             self.assertFalse(valid)
