@@ -7,8 +7,9 @@ try:
     unicode('')
 except NameError:
     PY3 = True
+    unicode = str
 
-ONE_MB = 2**20
+ONE_MB = 2 ** 20
 INT_SIZE = 2 ** 63 # 63 bits plus 1 bit for sign = 64 bit signed integer
 EMAIL_USER = re.compile(r"^[^ \t\n\r@<>()]+$", re.I)
 EMAIL_DOMAIN = re.compile(r'''
@@ -25,7 +26,8 @@ URL = re.compile(
     r'\[?[A-F0-9]*:[A-F0-9:]+\]?)' # ...or ipv6
     r'(?::\d+)?' # optional port
     r'(?:/?|[/?]\S+)$',
-re.IGNORECASE)
+    re.IGNORECASE
+)
 
 
 def validateString(source, max_length=500, newlines=False, encoding='utf-8'):
@@ -201,7 +203,7 @@ def validateInt(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1):
     if source:
         try:
             value = int(source)
-        except:
+        except ValueError:
             value = None
             valid = False
 
@@ -229,7 +231,7 @@ def validateFloat(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1):
     if source:
         try:
             value = float(source)
-        except:
+        except ValueError:
             value = None
             valid = False
 
@@ -260,7 +262,7 @@ def validateDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=False, pa
     if source:
         try:
             value = datetime.strptime(source, date_format)
-        except:
+        except ValueError:
             value = None
             valid = False
 
@@ -308,7 +310,7 @@ def validateRequiredDate(source, date_format="%Y-%m-%d", future_only=False, past
 def validateTime(source, time_format="%H:%M"):
 
     valid, value = validateDateTime(source, date_format=time_format)
-    
+
     if value:
         value = value.time()
 
