@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "gae_validators"
+version = "1.0.0"
+description = "User input validation with defaults for the Google App Engine datastore."
+
+license = "MIT"
+
+authors = ["Brendan Doms <b@bdoms.com>"]
+
+readme = 'README.md'
+
+repository = "https://github.com/bdoms/gae_validators"
+homepage = "https://github.com/bdoms/gae_validators"
+
+keywords = ['validation', 'google app engine', 'datastore', 'forms']
+
+[tool.poetry.dependencies]
+python = "^2.0 || ^3.0"
