@@ -1,9 +1,9 @@
-Copyright &copy; 2014-2017, [Brendan Doms](http://www.bdoms.com/)  
+Copyright &copy; 2014-2019, [Brendan Doms](http://www.bdoms.com/)  
 Licensed under the [MIT license](http://www.opensource.org/licenses/MIT)
 
 # GAE Validators
 
-GAE Validators provides user input validation methods for the Google App Engine datastore.
+GAE Validators provides user input validation methods with smart defaults for the Google App Engine datastore.
 
 ## How It Works
 
@@ -70,22 +70,37 @@ validatePhone(source)
 validateRequiredPhone(source)
 
 validateUrl(source)
+# only http and https schemes are supported
 
 validateRequiredUrl(source)
 
 validateChoices(source, choices)
 # choices should be an iterable
 
+validateRequiredChoices(source, choices)
+
 validateBool(source)
+# any value can be truthy or falsy
+# so there is no required version of validateBool, and it will never return an invalid result
 
 validateInt(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1)
 # INT_SIZE is defined as a 64 bit signed integer, which means 2 ** 63
 
+validateRequiredInt(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1)
+
 validateFloat(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1)
+
+validateRequiredFloat(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1)
 
 validateDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=False, past_only=False)
 
+validateRequiredDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=False, past_only=False)
+
 validateDate(source, date_format="%Y-%m-%d", future_only=False, past_only=False)
 
+validateRequiredDate(source, date_format="%Y-%m-%d", future_only=False, past_only=False)
+
 validateTime(source, time_format="%H:%M")
+
+validateRequiredTime(source, time_format="%H:%M")
 ```
