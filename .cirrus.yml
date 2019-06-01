@@ -19,4 +19,4 @@ build_package_test_task:
 lint_task:
   container:
     image: alpine/flake8:latest
-  script: flake8 *.py
+  script: flake8 --ignore=E128 --max-line-length=120 .

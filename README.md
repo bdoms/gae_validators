@@ -7,10 +7,10 @@ GAE Validators provides user input validation methods with smart defaults for th
 
 ## Build Status
 
-![Python 2 Tests](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=test2_task)
-![Python 3 Tests](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=test3_task)
-![Linter](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=lint_task)
-![Package](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=build_package_test_task)
+![Python 2 Tests](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=test2)
+![Python 3 Tests](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=test3)
+![Linter](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=lint)
+![Package](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=build_package_test)
 
 ## How It Works
 
