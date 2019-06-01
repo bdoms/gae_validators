@@ -1,1 +1,4 @@
 *.pyc
+
+dist/
+gae_validators.egg-info/

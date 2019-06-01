@@ -1,6 +1,6 @@
 import unittest
 
-from __init__ import (PY3, validateString, validateRequiredString, validateText,
+from gae_validators import (PY3, validateString, validateRequiredString, validateText,
     validateRequiredText, validateEmail, validateRequiredEmail, validatePhone,
     validateRequiredPhone, validateUrl, validateRequiredUrl, validateChoices,
     validateRequiredChoices, validateBool, validateInt, validateRequiredInt, validateFloat,

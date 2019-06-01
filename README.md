@@ -5,6 +5,13 @@ Licensed under the [MIT license](http://www.opensource.org/licenses/MIT)
 
 GAE Validators provides user input validation methods with smart defaults for the Google App Engine datastore.
 
+## Build Status
+
+![Python 2 Tests](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=test2_task)
+![Python 3 Tests](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=test3_task)
+![Linter](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=lint_task)
+![Package](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=build_package_test_task)
+
 ## How It Works
 
 Each validator is simply a method that receives string input and returns a tuple of `(valid, value)` back.
