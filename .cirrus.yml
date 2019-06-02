@@ -12,7 +12,7 @@ test3_task:
 build_package_test_task:
   pip_cache:
     folder: ~/.cache/pip
-    fingerprint_script: echo $PYTHON_VERSION
+    fingerprint_script: echo $PYTHON_VERSION && cat poetry.lock
     populate_script: python3 -m pip install --upgrade poetry
   build_package_test_script: poetry build
 
