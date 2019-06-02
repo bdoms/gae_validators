@@ -1,22 +1,22 @@
 container:
   image: python:3-alpine
 
-test2_task:
+python_2_tests_task:
   container:
     image: python:2-alpine
   test_script: python2 test.py
 
-test3_task:
+python_3_tests_task:
   test_script: python3 test.py
 
-build_package_test_task:
+build_package_task:
   pip_cache:
     folder: ~/.cache/pip
     fingerprint_script: echo $PYTHON_VERSION && cat poetry.lock
     populate_script: python3 -m pip install --upgrade poetry
   build_package_test_script: poetry build
 
-lint_task:
+flake8_task:
   container:
     image: alpine/flake8:latest
   script: flake8 --ignore=E128,E261 --max-line-length=120 .
