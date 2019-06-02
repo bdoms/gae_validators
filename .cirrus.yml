@@ -14,7 +14,7 @@ build_package_test_task:
     folder: ~/.cache/pip
     fingerprint_script: echo $PYTHON_VERSION
     populate_script: python3 -m pip install --upgrade poetry
-  build_package_test_script: python3 -m poetry build
+  build_package_test_script: poetry build
 
 lint_task:
   container:
