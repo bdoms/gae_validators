@@ -1,12 +1,12 @@
 container:
   image: python:3-alpine
 
-python_2_tests_task:
+python2_tests_task:
   container:
     image: python:2-alpine
   test_script: python2 test.py
 
-python_3_tests_task:
+python3_tests_task:
   test_script: python3 test.py
 
 build_package_task:

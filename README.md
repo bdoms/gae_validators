@@ -7,8 +7,8 @@ GAE Validators provides user input validation methods with smart defaults for th
 
 ## Build Status
 
-![Python 2 Tests](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=python_2_tests)
-![Python 3 Tests](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=python_3_tests)
+![Python 2 Tests](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=python2_tests)
+![Python 3 Tests](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=python3_tests)
 ![Flake8 Linter](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=flake8)
 ![Build Package](https://api.cirrus-ci.com/github/bdoms/gae_validators.svg?task=build_package)
 
