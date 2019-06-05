@@ -15,9 +15,17 @@ class TestValidators(unittest.TestCase):
             # check for invalid unicode string
             valid, value = validateString('\udcc3')
             self.assertFalse(valid)
+
+            # handle bad byte string
+            valid, value = validateString(b'\xff')
+            self.assertFalse(valid)
         else:
             # non-ascii characters in an ascii string should fail
             valid, value = validateString('\xaa')
+            self.assertFalse(valid)
+
+            # check for invalid unicode string
+            valid, value = validateString(u'\u0411', encoding='iso-8859-15')
             self.assertFalse(valid)
 
         # non-ascii string should pass

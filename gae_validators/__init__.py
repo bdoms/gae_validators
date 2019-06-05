@@ -36,12 +36,19 @@ def validateString(source, max_length=500, newlines=False, encoding='utf-8'):
     if source is None:
         value = ''
     elif PY3:
-        value = str(source)
-        try:
-            value.encode(encoding)
-        except UnicodeEncodeError:
-            value = ''
-            valid = False
+        if isinstance(source, bytes):
+            try:
+                value = source.decode(encoding)
+            except UnicodeDecodeError:
+                value = ''
+                valid = False
+        else:
+            value = str(source)
+            try:
+                value.encode(encoding)
+            except UnicodeEncodeError:
+                value = ''
+                valid = False
     else:
         if isinstance(source, unicode):
             value = source
