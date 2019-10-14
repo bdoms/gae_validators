@@ -71,6 +71,13 @@ class TestValidators(unittest.TestCase):
         valid, value = validateRequiredString('test')
         self.assertTrue(valid)
 
+        # enforce a higher minimum length
+        valid, value = validateRequiredString('foo', min_length=6)
+        self.assertFalse(valid)
+
+        valid, value = validateRequiredString('foobar', min_length=6)
+        self.assertTrue(valid)
+
     def testValidateText(self):
         # newlines should be allowed
         valid, value = validateText('foo\r\nbar')
@@ -91,6 +98,13 @@ class TestValidators(unittest.TestCase):
 
         # string with something should pass
         valid, value = validateRequiredText('test')
+        self.assertTrue(valid)
+
+        # enforce a higher minimum length
+        valid, value = validateRequiredText('foo', min_length=6)
+        self.assertFalse(valid)
+
+        valid, value = validateRequiredText('foobar', min_length=6)
         self.assertTrue(valid)
 
     def testValidateEmail(self):

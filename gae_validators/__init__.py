@@ -75,11 +75,11 @@ def validateString(source, max_length=500, newlines=False, encoding='utf-8'):
     return valid, value
 
 
-def validateRequiredString(source, max_length=500, newlines=False, encoding='utf-8'):
+def validateRequiredString(source, min_length=1, max_length=500, newlines=False, encoding='utf-8'):
 
     valid, value = validateString(source, max_length=max_length, newlines=newlines, encoding=encoding)
 
-    if valid and not value:
+    if valid and len(value) < min_length:
         valid = False
 
     return valid, value
@@ -90,9 +90,10 @@ def validateText(source, max_length=ONE_MB, newlines=True, encoding='utf-8'):
     return validateString(source, max_length=max_length, newlines=newlines, encoding=encoding)
 
 
-def validateRequiredText(source, max_length=ONE_MB, newlines=True, encoding='utf-8'):
+def validateRequiredText(source, min_length=1, max_length=ONE_MB, newlines=True, encoding='utf-8'):
 
-    return validateRequiredString(source, max_length=max_length, newlines=newlines, encoding=encoding)
+    return validateRequiredString(source, min_length=min_length, max_length=max_length,
+        newlines=newlines, encoding=encoding)
 
 
 def validateEmail(source):
