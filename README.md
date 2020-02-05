@@ -54,15 +54,17 @@ class ExampleHandler(webapp2.RequestHandler):
 Here are all the function signatures with their default configuration values:
 
 ```python
-validateString(source, max_length=500, newlines=False, encoding='utf-8')
+validateString(source, max_length=500, newlines=False, encoding='utf-8', condense=True, convert_spaces=True)
+# condense turns multiple spaces in a row into a single space, e.g. "foo   bar" becomes "foo bar"
+# convert_spaces turns unicode spaces into normal ASCII spaces
 
-validateRequiredString(source, min_length=1, max_length=500, newlines=False, encoding='utf-8')
+validateRequiredString(source, min_length=1, max_length=500, newlines=False, encoding='utf-8', condense=True, convert_spaces=True)
 # same as above execpt that a string below the min_length will fail
 
-validateText(source, max_length=ONE_MB, newlines=True, encoding='utf-8')
+validateText(source, max_length=ONE_MB, newlines=True, encoding='utf-8', condense=True, convert_spaces=True)
 # ONE_MB is defined as 2 ** 20
 
-validateRequiredText(source, min_length=1, max_length=ONE_MB, newlines=True, encoding='utf-8')
+validateRequiredText(source, min_length=1, max_length=ONE_MB, newlines=True, encoding='utf-8', condense=True, convert_spaces=True)
 
 validateEmail(source)
 

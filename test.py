@@ -58,6 +58,21 @@ class TestValidators(unittest.TestCase):
         self.assertTrue(valid)
         self.assertEqual(value, '')
 
+        # inner spaces should be condensed
+        valid, value = validateString('test  with   inner     spaces')
+        self.assertTrue(valid)
+        self.assertEqual(value, 'test with inner spaces')
+
+        # spaces should be converted
+        valid, value = validateString(u'test\xa0with\x20unicode\u2000spaces')
+        self.assertTrue(valid)
+        self.assertEqual(value, 'test with unicode spaces')
+
+        # spaces that need to be converted should also be condensed
+        valid, value = validateString(u'test\xa0\x20with inner\x20\xa0unicode\u2000 \u3000spaces')
+        self.assertTrue(valid)
+        self.assertEqual(value, 'test with inner unicode spaces')
+
     def testValidateRequiredString(self):
         # empty string should fail
         valid, value = validateRequiredString('')

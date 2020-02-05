@@ -17,6 +17,33 @@ EMAIL_DOMAIN = re.compile(r'''
     [a-z]{2,}$                       # TLD
 ''', re.I | re.VERBOSE)
 
+# this is a selective list that tries to encompass anything that actually renders as a space
+# that means zero-width spaces and visible characters are purposefully omitted
+# see http://jkorpela.fi/chars/spaces.html
+UNICODE_SPACES = (
+    u'\x20',
+    u'\xa0',
+    u'\u2000',
+    u'\u2001',
+    u'\u2002',
+    u'\u2003',
+    u'\u2004',
+    u'\u2005',
+    u'\u2006',
+    u'\u2007',
+    u'\u2008',
+    u'\u2009',
+    u'\u200a',
+    u'\u202f',
+    u'\u205f',
+    u'\u3000'
+)
+
+if PY3:
+    UNICODE_SPACES_MAP = {ord(key): ' ' for key in UNICODE_SPACES}
+else:
+    UNICODE_SPACES_MAP = {key: ' ' for key in UNICODE_SPACES}
+
 # based on Django's but with limited schemes: https://github.com/django/django/blob/master/django/core/validators.py
 URL = re.compile(
     r'^(?:http|https)://' # scheme
@@ -30,7 +57,24 @@ URL = re.compile(
 )
 
 
-def validateString(source, max_length=500, newlines=False, encoding='utf-8'):
+def _condense(source, key='  ', value=' '):
+    # appears faster than regex for shorter strings
+    while key in source:
+        source = source.replace(key, value)
+    return source
+
+
+def _translate(source, table):
+    if PY3:
+        source = source.translate(table)
+    else:
+        for key, value in table.iteritems():
+            source = source.replace(key, value)
+
+    return source
+
+
+def validateString(source, max_length=500, newlines=False, encoding='utf-8', condense=True, convert_spaces=True):
 
     valid = True
     if source is None:
@@ -65,6 +109,13 @@ def validateString(source, max_length=500, newlines=False, encoding='utf-8'):
                 valid = False
 
     if valid:
+        # convert_spaces is purposefully applied before condense
+        if convert_spaces:
+            value = _translate(value, UNICODE_SPACES_MAP)
+
+        if condense:
+            value = _condense(value)
+
         value = value.strip()
 
         if len(value) > max_length:
@@ -75,9 +126,11 @@ def validateString(source, max_length=500, newlines=False, encoding='utf-8'):
     return valid, value
 
 
-def validateRequiredString(source, min_length=1, max_length=500, newlines=False, encoding='utf-8'):
+def validateRequiredString(source, min_length=1, max_length=500, newlines=False, encoding='utf-8',
+        condense=True, convert_spaces=True):
 
-    valid, value = validateString(source, max_length=max_length, newlines=newlines, encoding=encoding)
+    valid, value = validateString(source, max_length=max_length, newlines=newlines, encoding=encoding,
+        condense=condense, convert_spaces=convert_spaces)
 
     if valid and len(value) < min_length:
         valid = False
@@ -85,15 +138,17 @@ def validateRequiredString(source, min_length=1, max_length=500, newlines=False,
     return valid, value
 
 
-def validateText(source, max_length=ONE_MB, newlines=True, encoding='utf-8'):
+def validateText(source, max_length=ONE_MB, newlines=True, encoding='utf-8', condense=True, convert_spaces=True):
 
-    return validateString(source, max_length=max_length, newlines=newlines, encoding=encoding)
+    return validateString(source, max_length=max_length, newlines=newlines, encoding=encoding,
+        condense=condense, convert_spaces=convert_spaces)
 
 
-def validateRequiredText(source, min_length=1, max_length=ONE_MB, newlines=True, encoding='utf-8'):
+def validateRequiredText(source, min_length=1, max_length=ONE_MB, newlines=True, encoding='utf-8',
+        condense=True, convert_spaces=True):
 
     return validateRequiredString(source, min_length=min_length, max_length=max_length,
-        newlines=newlines, encoding=encoding)
+        newlines=newlines, encoding=encoding, condense=condense, convert_spaces=convert_spaces)
 
 
 def validateEmail(source):
