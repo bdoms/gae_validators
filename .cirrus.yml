@@ -13,8 +13,8 @@ build_package_task:
   pip_cache:
     folder: ~/.cache/pip
     # there appears to be a cirrus bug with uploading the pip cache, so use the date to force a rebuild each time
-    fingerprint_script: echo $PYTHON_VERSION && date -u
-    populate_script: python3 -m pip install --upgrade poetry
+    fingerprint_script: echo $PYTHON_VERSION && cat pyproject.toml
+    populate_script: apk add gcc musl-dev libffi-dev openssl-dev && python3 -m pip install --upgrade poetry
   build_package_test_script: poetry build
 
 flake8_task:
