@@ -1,4 +1,4 @@
-Copyright &copy; 2014-2019, [Brendan Doms](http://www.bdoms.com/)  
+Copyright &copy; 2014-2020, [Brendan Doms](http://www.bdoms.com/)  
 Licensed under the [MIT license](http://www.opensource.org/licenses/MIT)
 
 # GAE Validators
@@ -62,6 +62,7 @@ validateRequiredString(source, min_length=1, max_length=500, newlines=False, enc
 # same as above execpt that a string below the min_length will fail
 
 validateText(source, max_length=ONE_MB, newlines=True, encoding='utf-8', condense=True, convert_spaces=True)
+# the major default difference with text is allowing newlines, and a much larger max_length
 # ONE_MB is defined as 2 ** 20
 
 validateRequiredText(source, min_length=1, max_length=ONE_MB, newlines=True, encoding='utf-8', condense=True, convert_spaces=True)
