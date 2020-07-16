@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gae_validators"
-version = "1.0.3"
+version = "1.0.4"
 description = "User input validation with defaults for the Google App Engine datastore."
 
 license = "MIT"

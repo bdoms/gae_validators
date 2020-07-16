@@ -178,20 +178,48 @@ def validateRequiredEmail(source):
     return valid, value
 
 
-def validatePhone(source):
+def _validateDigitString(source, min_length=10, max_length=15):
+    # WARNING: this is a private method for internal use only - do not call directly
+    valid = True
+    value = ''
+
+    digits = [char for char in source if char.isdigit()]
+    length = len(digits)
+    if length < min_length or length > max_length:
+        valid = False
+    else:
+        value = ''.join(digits)
+
+    return valid, value
+
+
+def validatePhone(source, extension_separators=None, extension_max_length=5):
 
     valid, value = validateString(source)
 
     if valid and value:
-        digits = [char for char in value if char.isdigit()]
-        length = len(digits)
-        if length < 10 or length > 15:
-            valid = False
-        else:
-            if length == 10:
+        ext = None
+        if extension_separators:
+            for sep in extension_separators:
+                if sep in value:
+                    value, ext_source = value.rsplit(sep, 1)
+                    if ext_source:
+                        ext_valid, ext_value = _validateDigitString(ext_source,
+                            min_length=1, max_length=extension_max_length)
+                        if ext_valid:
+                            ext = ext_value
+                    break
+
+        valid, digits = _validateDigitString(value)
+        if valid:
+            if len(digits) == 10:
                 # assume US/Canada with the country code missing
-                digits = ['1'] + digits
-            value = '+' + ''.join(digits)
+                digits = '1' + digits
+            value = '+' + digits
+
+            if ext:
+                # this is the E.164 way of specifying extensions
+                value += ';ext=' + ext
 
     return valid, value
 

@@ -14,8 +14,8 @@ GAE Validators provides user input validation methods with smart defaults for th
 
 ## How It Works
 
-Each validator is simply a method that receives string input and returns a tuple of `(valid, value)` back.
-`valid` is simply a boolean of whether the input passed validation or not.
+Each validator is a method that receives string input and returns a tuple of `(valid, value)` back.
+`valid` is a boolean of whether the input passed validation or not.
 `value` is a coerced, potentially optimized version of the input.
 For example, strings have outer whitespace stripped, while integers, booleans, and dates are all returned as their respective type.
 
@@ -33,6 +33,7 @@ For example:
 
 ```python
 from gae_validators import validateEmail
+
 
 class ExampleHandler(webapp2.RequestHandler):
 
@@ -71,11 +72,22 @@ validateEmail(source)
 
 validateRequiredEmail(source)
 
-validatePhone(source)
+validatePhone(source, extension_separators=None, extension_max_length=5)
 # returns the number in a good approximation of E.164 format
+# (suitable for use with services like Twilio)
 # this should work exactly for numbers with country code 1 (US and Canada)
 # however it will not be correct in all cases for all countries
 # you'll need a different solution if you want full international support
+
+# extension_separators should be an iterable of lowercase strings (e.g. `["ext", "extension"]`)
+# and MUST NOT contain numbers; these will be used to split the input
+# to try to validate a full phone number on the left and an extension on the right
+# note that if this argument is falsy (the default), then extensions will not be supported
+# if an extension fails validation it will be silently dropped
+
+# extension_max_length is the number of digits in the extension
+# note that some systems may be as high as 50 digits long, and there is no standard upper limit
+# we default to 5 to force a practical limit
 
 validateRequiredPhone(source)
 
@@ -103,6 +115,7 @@ validateFloat(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1)
 validateRequiredFloat(source, min_amount=-INT_SIZE, max_amount=INT_SIZE - 1)
 
 validateDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=False, past_only=False)
+# future_only and past_only use UTC time for comparisons
 
 validateRequiredDateTime(source, date_format="%Y-%m-%dT%H:%M", future_only=False, past_only=False)
 

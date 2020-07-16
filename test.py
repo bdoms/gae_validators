@@ -177,6 +177,32 @@ class TestValidators(unittest.TestCase):
         self.assertTrue(valid)
         self.assertEqual(value, '+15555555555')
 
+        # looking for extension but no extension separator
+        valid, value = validatePhone('555-555-5555', extension_separators=('ext'))
+        self.assertTrue(valid)
+        self.assertEqual(value, '+15555555555')
+
+        # looking for extension but none provided
+        valid, value = validatePhone('555-555-5555 ext', extension_separators=('ext'))
+        self.assertTrue(valid)
+        self.assertEqual(value, '+15555555555')
+
+        valid, value = validatePhone('555-555-5555 ext here', extension_separators=('ext'))
+        self.assertTrue(valid)
+        self.assertEqual(value, '+15555555555')
+
+        # looking for extension but it's too long
+        valid, value = validatePhone('555-555-5555 ext 123-456-7890',
+            extension_separators=('ext'), extension_max_length=9)
+        self.assertTrue(valid)
+        self.assertEqual(value, '+15555555555')
+
+        # valid extension
+        valid, value = validatePhone('555-555-5555 ext 123-456-789',
+            extension_separators=('ext'), extension_max_length=9)
+        self.assertTrue(valid)
+        self.assertEqual(value, '+15555555555;ext=123456789')
+
     def testValidateRequiredPhone(self):
         # empty string should fail
         valid, value = validateRequiredPhone('')
